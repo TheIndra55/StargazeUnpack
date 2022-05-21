@@ -1,0 +1,44 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: Template.bt
+//   Authors: TheIndra
+//   Version: 1.0
+//   Purpose: Parse Stargaze Framework Game Pack files
+//  Category: Archive
+// File Mask: game.pack
+//  ID Bytes: 53 46 50 01
+//   History: 
+//------------------------------------------------
+
+struct FileHeader
+{
+    char magic[4];
+    uint numFiles;
+    uint dataSize;
+} header;
+
+typedef struct
+{
+    ushort size;
+    ushort maxSize;
+    short  hash;
+    ushort pad;
+    char   content[maxSize];
+} BasicString <read=ReadBasicString>;
+
+string ReadBasicString(BasicString &str)
+{
+    string s;
+    SPrintf(s, "%s", str.content);
+    return s;
+}
+
+struct RecordHeader
+{
+    BasicString filename;
+    uint size;
+    uint offset;
+};
+
+RecordHeader records[header.numFiles];
